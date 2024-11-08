@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ruleta de Premios</title>
+    <title>Formulario de Opinión</title>
     <style>
+        /* Estilos básicos para el formulario */
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -14,99 +15,104 @@
             margin: 0;
             background-color: #f4f4f4;
         }
-        .wheel-container {
-            position: relative;
-        }
-        #wheel {
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            border: 5px solid #333;
+        }
+        h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .radio-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: conic-gradient(
-                #FFDDC1 0deg 72deg,
-                #FFABAB 72deg 144deg,
-                #FFC3A0 144deg 216deg,
-                #FF677D 216deg 288deg,
-                #D4A5A5 288deg 360deg
-            );
-            position: relative;
+            justify-content: space-between;
         }
-        .wheel-container::before {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 20px solid black;
-        }
-        #spinButton {
-            margin-top: 20px;
-            padding: 10px 20px;
+        button {
+            width: 100%;
+            padding: 10px;
             background-color: #4CAF50;
             color: white;
             border: none;
-            font-size: 16px;
             cursor: pointer;
-            border-radius: 5px;
         }
-        #spinButton:hover {
+        button:hover {
             background-color: #45a049;
-        }
-        #result {
-            margin-top: 20px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="wheel-container">
-        <div id="wheel"></div>
-    </div>
-    <button id="spinButton" onclick="spinWheel()">Girar Rulet1a</button>
-    <div id="result"></div>
+    <form id="feedbackForm">
+        <h2>Formulario de Opinión</h2>
+
+        <!-- Pregunta 1: Selección múltiple -->
+        <div class="form-group">
+            <label>1. ¿Cómo calificaría nuestro servicio?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="servicio" value="Excelente" required> Excelente</label>
+                <label><input type="radio" name="servicio" value="Bueno"> Bueno</label>
+                <label><input type="radio" name="servicio" value="Regular"> Regular</label>
+            </div>
+        </div>
+
+        <!-- Pregunta 2: Escala de satisfacción -->
+        <div class="form-group">
+            <label>2. ¿Qué tan satisfecho está con la calidad de la comida?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="calidad" value="1" required> 1</label>
+                <label><input type="radio" name="calidad" value="2"> 2</label>
+                <label><input type="radio" name="calidad" value="3"> 3</label>
+                <label><input type="radio" name="calidad" value="4"> 4</label>
+                <label><input type="radio" name="calidad" value="5"> 5</label>
+            </div>
+        </div>
+
+        <!-- Pregunta 3: Campo de texto corto -->
+        <div class="form-group">
+            <label>3. ¿Cuál es su platillo favorito?</label>
+            <input type="text" name="platillo" required>
+        </div>
+
+        <!-- Pregunta 4: Campo de texto largo -->
+        <div class="form-group">
+            <label>4. ¿Tiene algún comentario o sugerencia?</label>
+            <textarea name="comentario" rows="3" required></textarea>
+        </div>
+
+        <!-- Pregunta 5: Selección múltiple -->
+        <div class="form-group">
+            <label>5. ¿Recomendaría nuestro restaurante a sus amigos?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="recomendar" value="Sí" required> Sí</label>
+                <label><input type="radio" name="recomendar" value="No"> No</label>
+            </div>
+        </div>
+
+        <button type="submit">Enviar Respuestas</button>
+    </form>
 
     <script>
-        const premios = ["Cuenta Gratis", "10% de Descuento", "Postre Gratis", "Estacionamiento Gratis", "50% de Descuento"];
-
-        function spinWheel() {
-            const spinButton = document.getElementById("spinButton");
-            const resultText = document.getElementById("result");
-            
-            // Deshabilitar el botón mientras la ruleta gira
-            spinButton.disabled = true;
-            resultText.innerText = "Girando...";
-
-            // Duración y grados de giro de la ruleta
-            const rotationDegrees = 360 * 5 + Math.floor(Math.random() * 360); // Gira al menos 5 vueltas
-            const rotation = `rotate(${rotationDegrees}deg)`;
-
-            // Animación de la ruleta
-            const wheel = document.getElementById("wheel");
-            wheel.style.transition = "transform 4s ease-out";
-            wheel.style.transform = rotation;
-
-            // Determinar el premio una vez que termina de girar
-            setTimeout(() => {
-                const finalDegree = rotationDegrees % 360;
-                const selectedIndex = Math.floor(finalDegree / (360 / premios.length));
-                const premioGanado = premios[selectedIndex];
-                
-                resultText.innerText = `¡Felicidades! Ganaste: ${premioGanado}`;
-                
-                // Rehabilitar el botón
-                spinButton.disabled = false;
-            }, 4000); // Tiempo de la animación en milisegundos
-        }
+        // Al enviar el formulario, redirigir al usuario a la ruleta de premios
+        document.getElementById("feedbackForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Evitar el envío real del formulario
+            alert("¡Gracias por completar el formulario! Ahora podrás girar la ruleta para obtener tu premio.");
+            window.location.href = "ruleta.html"; // Reemplaza con la URL de la ruleta de premios
+        });
     </script>
 </body>
 </html>
